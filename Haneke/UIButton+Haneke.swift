@@ -22,7 +22,7 @@ public extension UIButton {
     }
     
     public func hnk_setImageFromURL(_ URL: Foundation.URL, state: UIControl.State = .normal, placeholder: UIImage? = nil, format: Format<UIImage>? = nil, failure fail: ((Error?) -> ())? = nil, success succeed: ((UIImage) -> ())? = nil) {
-        let fetcher = NetworkFetcher<UIImage>(URL: URL)
+        let fetcher = NetworkFetcher<UIImage>(URL: URL, parameter: nil)
         self.hnk_setImageFromFetcher(fetcher, state: state, placeholder: placeholder, format: format, failure: fail, success: succeed)
     }
     
@@ -133,7 +133,7 @@ public extension UIButton {
     }
     
     public func hnk_setBackgroundImageFromURL(_ URL : Foundation.URL, state : UIControl.State = .normal, placeholder : UIImage? = nil, format : Format<UIImage>? = nil, failure fail : ((Error?) -> ())? = nil, success succeed : ((UIImage) -> ())? = nil) {
-        let fetcher = NetworkFetcher<UIImage>(URL: URL)
+        let fetcher = NetworkFetcher<UIImage>(URL: URL, parameter: nil)
         self.hnk_setBackgroundImageFromFetcher(fetcher, state: state, placeholder: placeholder, format: format, failure: fail, success: succeed)
     }
     

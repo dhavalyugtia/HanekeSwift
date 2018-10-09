@@ -304,7 +304,7 @@ open class Cache<T: DataConvertible> where T.Result == T, T : DataRepresentable 
     }
     
     open func fetch(URL : Foundation.URL, formatName: String = HanekeGlobals.Cache.OriginalFormatName,  failure fail : Fetch<T>.Failer? = nil, success succeed : Fetch<T>.Succeeder? = nil) -> Fetch<T> {
-        let fetcher = NetworkFetcher<T>(URL: URL)
+        let fetcher = NetworkFetcher<T>(URL: URL, parameter: nil)
         return self.fetch(fetcher: fetcher, formatName: formatName, failure: fail, success: succeed)
     }
     

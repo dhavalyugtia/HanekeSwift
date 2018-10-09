@@ -18,7 +18,7 @@ public extension UIImageView {
     }
     
     public func hnk_setImageFromURL(_ URL: Foundation.URL, placeholder : UIImage? = nil, format : Format<UIImage>? = nil, failure fail : ((Error?) -> ())? = nil, success succeed : ((UIImage) -> ())? = nil) {
-        let fetcher = NetworkFetcher<UIImage>(URL: URL)
+        let fetcher = NetworkFetcher<UIImage>(URL: URL, parameter: nil)
         self.hnk_setImage(fromFetcher: fetcher, placeholder: placeholder, format: format, failure: fail, success: succeed)
     }
     

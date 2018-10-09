@@ -24,12 +24,12 @@ extension HanekeGlobals {
 }
 
 open class NetworkFetcher<T : DataConvertible> : Fetcher<T> {
-    
+    var parameter : [String:Any]?
     let URL : Foundation.URL
     
-    public init(URL : Foundation.URL) {
+    public init(URL : Foundation.URL,parameter:[String:Any]?) {
         self.URL = URL
-
+self.parameter = parameter
         let key =  URL.absoluteString
         super.init(key: key)
     }
@@ -37,16 +37,36 @@ open class NetworkFetcher<T : DataConvertible> : Fetcher<T> {
     open var session : URLSession { return URLSession.shared }
     
     var task : URLSessionDataTask? = nil
-    
+    var withAlamoFire = false
     var cancelled = false
     
     // MARK: Fetcher
-    
+    func formUrLRequrst() -> URLRequest? {
+        
+        var request = URLRequest(url: self.URL)
+        request.httpMethod = "POST"
+        request.setValue("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjViNjkyYzhiNjMzYzgxMTI4ODYyM2RjMiJ9.5KsYOr9_d4vIRzKgmi2ypP9187UY3BSxnvKMk-on9XY", forHTTPHeaderField: "Authorization")
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: self.parameter as Any , options: []) else {
+            return nil
+        }
+        request.httpBody = httpBody
+        return request
+    }
     open override func fetch(failure fail: @escaping ((Error?) -> ()), success succeed: @escaping (T.Result) -> ()) {
         self.cancelled = false
-        self.task = self.session.dataTask(with: self.URL) {[weak self] (data, response, error) -> Void in
-            if let strongSelf = self {
-                strongSelf.onReceive(data: data, response: response, error: error, failure: fail, success: succeed)
+        if (parameter != nil){
+            if  let urlRequestt = formUrLRequrst(){
+                self.task = self.session.dataTask(with: urlRequestt) {[weak self] (data, response, error) -> Void in
+                    if let strongSelf = self {
+                        strongSelf.onReceive(data: data, response: response, error: error, failure: fail, success: succeed)
+                    }
+                }
+            }
+        }else{
+            self.task = self.session.dataTask(with: self.URL) {[weak self] (data, response, error) -> Void in
+                if let strongSelf = self {
+                    strongSelf.onReceive(data: data, response: response, error: error, failure: fail, success: succeed)
+                }
             }
         }
         self.task?.resume()

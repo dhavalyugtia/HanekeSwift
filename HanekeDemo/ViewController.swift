@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Haneke
 
 let CellReuseIdentifier = "Cell"
 
@@ -20,7 +21,19 @@ class ViewController: UICollectionViewController {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 100, height: 100)
         self.collectionView!.collectionViewLayout = layout
-        
+        let cache = Shared.JSONCache
+        let uel = URL(string: "http://192.168.1.167:3000/api/v1/feeds/list")
+        let parameterDictionary = ["username" : "Test", "password" : "123456"] //as [String:Any]
+        let fetcher = NetworkFetcher<JSON>(URL: uel!, parameter: parameterDictionary)
+        cache.fetch(fetcher: fetcher)
+            .onFailure { (error) in
+                print(error?.localizedDescription)
+                //self.stopLoading()
+            }
+            .onSuccess { (result) in
+              //  self.stopLoading()
+                print(result)
+        }
         self.initializeItemsWithURLs()
     }
 
